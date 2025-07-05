@@ -17,6 +17,7 @@ MATLAB EXPO 2025 用 - 魚検出システム (Fish Detection System)
 
 ## プロジェクト構成
 
+私たちが開発した魚検出YOLOモデル(`FishDetector-TinyYOLOv4.mat`)は， [OneDrive](https://1drv.ms/u/c/729fc9ffb003509d/EbDqK5vTqglOhK7wzjSUjEcBaaj2lQkdI0_W8KuAYtSFCw?e=4XVojP) からダウンロードしてください．
 ```
 MATLAB2025/
 ├── FishDetector-TinyYOLOv4.mat  # 学習済み検出モデル
