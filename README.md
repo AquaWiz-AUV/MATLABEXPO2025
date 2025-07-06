@@ -17,7 +17,8 @@ MATLAB EXPO 2025 用 - 魚検出システム (Fish Detection System)
 
 ## プロジェクト構成
 
-私たちが開発した魚検出YOLOモデル(`FishDetector-TinyYOLOv4.mat`)は， [OneDrive](https://1drv.ms/u/c/729fc9ffb003509d/EbDqK5vTqglOhK7wzjSUjEcBaaj2lQkdI0_W8KuAYtSFCw?e=4XVojP) からダウンロードしてください．
+私たちが開発した魚検出 YOLO モデル(`FishDetector-TinyYOLOv4.mat`)は， [OneDrive](https://1drv.ms/u/c/729fc9ffb003509d/EbDqK5vTqglOhK7wzjSUjEcBaaj2lQkdI0_W8KuAYtSFCw?e=4XVojP) からダウンロードしてください．
+
 ```
 MATLAB2025/
 ├── FishDetector-TinyYOLOv4.mat  # 学習済み検出モデル
@@ -33,16 +34,23 @@ MATLAB2025/
 
 ### 1. データセットの準備
 
-DeepFish データセットが `dataset/DeepFish/` に配置されていることを確認してください。データ構造は以下の通りです：
+データセットは [DeepFish](https://alzayats.github.io/DeepFish/)を使用しています．
+ここからダウンロードしたものを解凍し，そのまま dataset フォルダ(なければ作成し)に入れてください．
 
 ```
 dataset/DeepFish/
 ├── Fish/
 │   └── [ID]/
-│       ├── train/  # 学習用画像とアノテーション
-│       └── valid/  # 検証用画像とアノテーション
-└── classes.txt
+│       ├── train/  # 学習用画像(.jpg)とアノテーション(.txt)
+│       └── valid/  # 検証用画像(.jpg)とアノテーション(.txt)
+├── Nagative_samples/  # 魚が写っていない画像
+└── classes.txt  # クラス定義ファイル
 ```
+
+アノテーションファイル（.txt）の形式：
+
+- YOLO 形式：`class_id x_center y_center width height`（正規化座標）
+- 各値は 0-1 の範囲で正規化されています
 
 ### 2. モデルの学習
 
@@ -106,6 +114,36 @@ CalculateAdvanced
 ```
 
 このスクリプトは複数の検出閾値（0.01 ～ 0.18）で評価を行い、最適な閾値を自動的に特定します。
+
+### 4. 複数モデルの性能比較（RankAP）
+
+```matlab
+% 複数のモデルファイルを格納したフォルダを指定
+modelsFolder = 'path/to/your/models';  % デフォルト: 'C:\Users\s-mat\AppData\Local\Temp\mat_models'
+% ... validationDataの準備 ...
+
+% モデルのAP値を計算してランキング表示
+RankAP
+```
+
+このスクリプトは指定フォルダ内のすべての学習済みモデル（.mat ファイル）に対して：
+
+- Average Precision (AP) を自動計算
+- AP 値の降順でランキング表示
+- 最も性能の良いモデルを特定
+
+出力例：
+
+```
+model1.mat -> AP: 0.89234
+model2.mat -> AP: 0.87512
+model3.mat -> AP: 0.91045
+
+--- Average Precision Ranking ---
+1: model3.mat -> AP: 0.91045
+2: model1.mat -> AP: 0.89234
+3: model2.mat -> AP: 0.87512
+```
 
 ## 画像から魚を検出する手順
 

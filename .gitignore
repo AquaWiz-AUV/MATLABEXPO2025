@@ -2,3 +2,5 @@ dataset/
 tmp/
 .DS_Store
 TrainModels/
+FishDetector-TinyYOLOv4.mat
+CLAUDE.md
